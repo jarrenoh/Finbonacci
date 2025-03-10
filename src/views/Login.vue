@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Finbonacci</h1>
+        <img src="../assets/finbonacci_logo.png" alt="Finbonacci Logo" width="200">
         <h2>Login</h2>
         <p><input type="text" placeholder="Email or Username" v-model="loginInput"></p>
         <p><input type="password" placeholder="Password" v-model="password"></p>
