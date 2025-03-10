@@ -46,6 +46,7 @@ const login = async () => {
             router.push('/home');
         })
         .catch((error) => {
+
             switch (error.code) {
                 case "auth/invalid-email":
                     errMsg.value = "Invalid Email";
@@ -55,9 +56,6 @@ const login = async () => {
                     break;
                 case "auth/wrong-password":
                     errMsg.value = "Wrong Password";
-                    break;
-                default:
-                    errMsg.value = "Something Went Wrong";
                     break;
             }
         });
