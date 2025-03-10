@@ -1,36 +1,60 @@
 <template>
-    <div class = "container">
+    <div class="container">
         <h1>Register as a Normal User</h1>
+        <p><input type="text" placeholder="Username" v-model="username"></p>
+        <p v-if="usernameError" class="error">{{ usernameError }}</p>
         <p><input type="text" placeholder="Email" v-model="email"></p>
         <p><input type="password" placeholder="Password" v-model="password"></p>
+        <p><input type="number" placeholder="Saving Target" v-model="savingTarget"></p>
+        <p><input type="number" placeholder="Spending Target" v-model="spendingTarget"></p>
         <p><button @click="register">Register</button></p>
     </div>
-
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import {useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { db } from '../main.js';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 
 const email = ref('');
 const password = ref('');
+const username = ref('');
+const savingTarget = ref('');
+const spendingTarget = ref('');
+const usernameError = ref('');
 const router = useRouter();
 
-const register = () => {
+const checkUsernameUnique = async () => {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("username", "==", username.value));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty;
+};
+
+const register = async () => {
+    if (!await checkUsernameUnique()) {
+        usernameError.value = "Username already taken!";
+        return;
+    }
+
     createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-        .then((data) => {
-            console.log("Successfully registered");
+        .then(async (userCredential) => {
+            const user = userCredential.user;
+            await addDoc(collection(db, "users"), {
+                uid: user.uid,
+                username: username.value,
+                email: email.value,
+                savingTarget: parseFloat(savingTarget.value),
+                spendingTarget: parseFloat(spendingTarget.value),
+            });
             router.push('/home');
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            console.error(error.code, error.message);
         });
-}
-
-
+};
 </script>
 
 

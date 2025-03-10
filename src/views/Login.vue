@@ -1,12 +1,11 @@
 <template>
     <div class="container">
         <h1>Finbonacci</h1>
-        <p>Take control of your Financial future with us - smart tracking, powerful insights and expert advice, all in one place!</p>
-        <h2>Have An Account?</h2>
-        <p><input type="text" placeholder="Email" v-model="email"></p>
+        <h2>Login</h2>
+        <p><input type="text" placeholder="Email or Username" v-model="loginInput"></p>
         <p><input type="password" placeholder="Password" v-model="password"></p>
         <p v-if="errMsg" class="error">{{ errMsg }}</p>
-        <p><button @click="register">Sign In</button></p>
+        <p><button @click="login">Sign In</button></p>
     </div>
 </template>
 
@@ -14,26 +13,43 @@
 import { ref } from 'vue';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'vue-router';
+import { db } from '../main.js';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
-const email = ref('');
+const loginInput = ref('');
 const password = ref('');
 const errMsg = ref('');
 const router = useRouter();
 
-const register = () => {
-    signInWithEmailAndPassword(getAuth(), email.value, password.value)
+const login = async () => {
+    let email = loginInput.value;
+
+    if (!email.includes("@")) {
+        // If input is not an email, assume it's a username and retrieve the associated email
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("username", "==", loginInput.value));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            errMsg.value = "Username not found";
+            return;
+        }
+
+        email = querySnapshot.docs[0].data().email;
+    }
+
+    signInWithEmailAndPassword(getAuth(), email, password.value)
         .then(() => {
             console.log("Logged In");
             router.push('/home');
         })
         .catch((error) => {
-            console.log(error.code);
             switch (error.code) {
                 case "auth/invalid-email":
                     errMsg.value = "Invalid Email";
                     break;
                 case "auth/user-not-found":
-                    errMsg.value = "No Account With That Email Found";
+                    errMsg.value = "No Account With That Email/Username Found";
                     break;
                 case "auth/wrong-password":
                     errMsg.value = "Wrong Password";
@@ -43,7 +59,7 @@ const register = () => {
                     break;
             }
         });
-}
+};
 </script>
 
 <style scoped>
