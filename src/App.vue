@@ -1,47 +1,43 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <nav>
+    <router-link to="/"> Login </router-link>
+    <router-link to="/register"> Register </router-link>
+    <router-link to="/home"> Home </router-link>
+    <button @click="handleSignOut" v-if="isLoggedIn"> Sign Out </button>
+  </nav>
+  <router-view />
 </template>
 
+<script setup>
+import {onMounted, ref} from "vue";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { useRouter } from 'vue-router';
+const isLoggedIn = ref(false);
+const router = useRouter();
+
+let auth;
+onMounted(() => {
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      isLoggedIn.value = true;
+    } else {
+      isLoggedIn.value = false;
+    }
+  });
+});
+
+
+const handleSignOut = () => {
+  signOut(auth).then(() => {
+    router.push('/');
+  });
+}
+</script>
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: bisque;
 }
 </style>
