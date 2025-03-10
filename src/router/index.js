@@ -5,11 +5,16 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: "/", component: () => import("../views/Login.vue") },
-        {path: "/register", component: () => import("../views/Register.vue")},
-        {path: "/home", component: () => import("../views/Home.vue"),
-            meta: {
-                requiresAuth: true,
-            }
+        { path: "/register", component: () => import("../views/Register.vue") },
+        { 
+            path: "/home", 
+            component: () => import("../views/Home.vue"),
+            meta: { requiresAuth: true } 
+        },
+        { 
+            path: "/uploads", 
+            component: () => import("../views/Uploads.vue"),
+            meta: { requiresAuth: true } 
         }
     ],
 });

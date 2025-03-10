@@ -6,6 +6,7 @@
         <p><input type="password" placeholder="Password" v-model="password"></p>
         <p v-if="errMsg" class="error">{{ errMsg }}</p>
         <p><button @click="login">Sign In</button></p>
+        <p><button class="register-btn" @click="goToRegister">Register</button></p>
     </div>
 </template>
 
@@ -59,6 +60,10 @@ const login = async () => {
                     break;
             }
         });
+};
+
+const goToRegister = () => {
+    router.push('/register');
 };
 </script>
 

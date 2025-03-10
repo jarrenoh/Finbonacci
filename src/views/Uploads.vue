@@ -6,7 +6,8 @@
             <button @click="handleSignOut">Sign Out</button>
         </nav>
         <div class="container">
-            <img src="../assets/finbonacci_logo.png" alt="Finbonacci Logo" width="200">
+            <h1>Uploads Page</h1>
+            <p>This is the uploads section. Feature coming soon!</p>
         </div>
     </div>
 </template>
@@ -27,9 +28,9 @@ const handleSignOut = () => {
 <style scoped>
 .navbar {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 20px;
     background-color: grey;
 }
 
@@ -37,6 +38,7 @@ const handleSignOut = () => {
     color: white;
     text-decoration: none;
     font-size: 16px;
+    margin: 0 15px;
 }
 
 .navbar button {
@@ -59,5 +61,6 @@ const handleSignOut = () => {
     align-items: center;
     height: 100vh;
     background-color: bisque;
+    text-align: center;
 }
 </style>

@@ -7,7 +7,10 @@
         <p><input type="password" placeholder="Password" v-model="password"></p>
         <p><input type="number" placeholder="Saving Target" v-model="savingTarget"></p>
         <p><input type="number" placeholder="Spending Target" v-model="spendingTarget"></p>
-        <p><button @click="register">Register</button></p>
+        <p>
+            <button @click="register">Register</button>
+            <button class="back-btn" @click="goToLogin">Back to Login</button>
+        </p>
     </div>
 </template>
 
@@ -55,8 +58,11 @@ const register = async () => {
             console.error(error.code, error.message);
         });
 };
-</script>
 
+const goToLogin = () => {
+    router.push('/');
+};
+</script>
 
 <style scoped>
 .container {
@@ -87,10 +93,19 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 5px;
 }
 
 button:hover {
     background-color: #0056b3;
+}
+
+.back-btn {
+    background-color: #dc3545;
+}
+
+.back-btn:hover {
+    background-color: #c82333;
 }
 
 .error {
