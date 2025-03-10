@@ -27,9 +27,6 @@ const handleSignOut = () => {
     router.push('/');
   });
 };
-
-// Show Sign Out button only on Home Page
-const isHomePage = computed(() => route.path === "/home");
 </script>
 
 <style scoped>
