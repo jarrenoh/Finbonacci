@@ -6,7 +6,6 @@
         <p><input type="text" placeholder="Email" v-model="email"></p>
         <p><input type="password" placeholder="Password" v-model="password"></p>
         <p><input type="number" placeholder="Monthly Saving Target" v-model="savingTarget"></p>
-        <p><input type="number" placeholder="Monthly Spending Target" v-model="spendingTarget"></p>
         <p>
             <button @click="register">Register</button>
             <button class="back-btn" @click="goToLogin">Back to Login</button>
@@ -25,7 +24,6 @@ const email = ref('');
 const password = ref('');
 const username = ref('');
 const savingTarget = ref('');
-const spendingTarget = ref('');
 const usernameError = ref('');
 const router = useRouter();
 
@@ -50,7 +48,6 @@ const register = async () => {
                 username: username.value,
                 email: email.value,
                 savingTarget: parseFloat(savingTarget.value),
-                spendingTarget: parseFloat(spendingTarget.value),
             });
             router.push('/home');
         })
